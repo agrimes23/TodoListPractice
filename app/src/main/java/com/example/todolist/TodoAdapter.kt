@@ -1,6 +1,51 @@
 package com.example.todolist
 
+import android.graphics.Paint.STRIKE_THRU_TEXT_FLAG
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.TextView
+import androidx.recyclerview.widget.RecyclerView
+import com.example.todolist.databinding.ItemTodoBinding
+
 class TodoAdapter (
-    private val 
-        ) {
+    private val todos: MutableList<Todo>
+) : RecyclerView.Adapter<TodoAdapter.TodoViewHolder>() {
+
+    class TodoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TodoViewHolder {
+        return TodoViewHolder(
+            LayoutInflater.from(parent.context).inflate(
+                R.layout.item_todo,
+                parent,
+                false
+            )
+        )
+    }
+
+    private fun toggleStrikeThrough(tvTodoTitle: TextView, isChecked: Boolean) {
+        if(isChecked) {
+            tvTodoTitle.paintFlags = tvTodoTitle.paintFlags or STRIKE_THRU_TEXT_FLAG
+        } else {
+            tvTodoTitle.paintFlags = tvTodoTitle.paintFlags and STRIKE_THRU_TEXT_FLAG.inv()
+        }
+    }
+
+    override fun onBindViewHolder(holder: TodoViewHolder, position: Int) {
+        val curTodo = todos[position]
+        val binding = ItemTodoBinding.bind(holder.itemView)
+
+        binding.tvTodoTitle.text = curTodo.title
+        binding.cbDone.isChecked = curTodo.isChecked
+        toggleStrikeThrough(binding.tvTodoTitle, curTodo.isChecked)
+        binding.cbDone.setOnCheckedChangeListener { _, isChecked ->
+            toggleStrikeThrough(binding.tvTodoTitle, isChecked)
+            curTodo.isChecked = !curTodo.isChecked
+        }
+    }
+
+    override fun getItemCount(): Int {
+        return todos.size
+    }
 }
