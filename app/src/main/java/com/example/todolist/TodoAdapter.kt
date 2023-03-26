@@ -1,5 +1,6 @@
 package com.example.todolist
 
+import android.annotation.SuppressLint
 import android.graphics.Paint.STRIKE_THRU_TEXT_FLAG
 import android.view.LayoutInflater
 import android.view.View
@@ -22,6 +23,19 @@ class TodoAdapter (
                 false
             )
         )
+    }
+
+    fun addTodo(todo: Todo) {
+        todos.add(todo)
+        notifyItemInserted(todos.size - 1)
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    fun deleteDoneTodos() {
+        todos.removeAll { todo ->
+            todo.isChecked
+        }
+        notifyDataSetChanged()
     }
 
     private fun toggleStrikeThrough(tvTodoTitle: TextView, isChecked: Boolean) {
