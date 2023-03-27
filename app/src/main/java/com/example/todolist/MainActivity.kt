@@ -4,30 +4,29 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.todolist.databinding.ActivityMainBinding
-import com.example.todolist.databinding.ItemTodoBinding
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var todoAdapter: TodoAdapter
-    private val vb by lazy { ActivityMainBinding.inflate(layoutInflater) }
+    private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(vb.root)
+        setContentView(binding.root)
         todoAdapter = TodoAdapter(mutableListOf())
 
-        vb.rvTodoItems.adapter = todoAdapter
-        vb.rvTodoItems.layoutManager = LinearLayoutManager(this)
+        binding.rvTodoItems.adapter = todoAdapter
+        binding.rvTodoItems.layoutManager = LinearLayoutManager(this)
 
-        vb.btnAddTodo.setOnClickListener {
-            val todoTitle = vb.etTodoTitle.text.toString()
+        binding.btnAddTodo.setOnClickListener {
+            val todoTitle = binding.etTodoTitle.text.toString()
             if(todoTitle.isNotEmpty()) {
                 val todo = Todo(todoTitle)
                 todoAdapter.addTodo(todo)
-                vb.etTodoTitle.text.clear()
+                binding.etTodoTitle.text.clear()
             }
         }
-        vb.btnDeleteDoneTodo.setOnClickListener {
+        binding.btnDeleteDoneTodo.setOnClickListener {
             todoAdapter.deleteDoneTodos()
         }
     }
